@@ -4,9 +4,23 @@ describe('Add Todo', () => {
   it('add todo', () => {
     addTodoItem(todoItem);
 
-    expect(window.todoItems.length).toEqual(1);
-    expect(window.todoItems[0]).toEqual(todoItem);
+    expect(todoItems.length).toEqual(1);
+    expect(todoItems[0]).toEqual(todoItem);
   });
+
+  it('add todo id0', () => {
+    addTodoItem({ ...todoItem, id: 0 });
+
+    expect(todoItems.length).toEqual(1);
+    expect(todoItems[0]).toEqual({ ...todoItem, id: 0 });
+  });
+
+  it('todo not_completed by default', () => {
+    addTodoItem({...todoItem, completed: true});
+
+    expect(todoItems.length).toEqual(1);
+    expect(todoItems[0].completed).toBe(false);
+  }),
 
   it('add 2 todos', () => {
     const newTodo = { ...todoItem, id: 2 };
@@ -14,9 +28,9 @@ describe('Add Todo', () => {
     addTodoItem(todoItem);
     addTodoItem(newTodo);
 
-    expect(window.todoItems.length).toEqual(2);
-    expect(window.todoItems[0]).toEqual(todoItem);
-    expect(window.todoItems[1]).toEqual(newTodo);
+    expect(todoItems.length).toEqual(2);
+    expect(todoItems[0]).toEqual(todoItem);
+    expect(todoItems[1]).toEqual(newTodo);
   });
 
   it('check addTodoItem success flag', () => {
@@ -41,7 +55,7 @@ describe('Add Todo', () => {
   it('todo without text not added', () => {
     addTodoItem({ ...todoItem, text: '' });
 
-    expect(window.todoItems).toEqual([]);
+    expect(todoItems).toEqual([]);
   });
 
   it('todo without any field not added', () => {
@@ -62,15 +76,15 @@ describe('Add Todo', () => {
     addTodoItem(todoItem_NO_COMPLETED);
     addTodoItem(todoItem_NO_ID);
 
-    expect(window.todoItems.length).toEqual(0);
+    expect(todoItems.length).toEqual(0);
   });
 
   it('todo with not unique ID not added', () => {
     addTodoItem(todoItem);
     addTodoItem(todoItem);
 
-    expect(window.todoItems.length).toEqual(1);
-    expect(window.todoItems[0]).toEqual(todoItem);
+    expect(todoItems.length).toEqual(1);
+    expect(todoItems[0]).toEqual(todoItem);
   });
 });
 
@@ -183,11 +197,11 @@ describe('Complete Todos', () => {
 });
 
 function clearTodoList() {
-  window.todoItems = [];
+  todoItems = [];
 }
 
 function getAllTodoItems() {
-  return window.todoItems;
+  return todoItems;
 }
 
 const todoItem = Object.freeze({

@@ -1,15 +1,19 @@
-var todoItems = [];
-
 function addTodoItem(todoItem) {
-  const isIdUnique = todoItem.id && todoItems.filter(item => item.id === todoItem.id).length === 0;
-
-  if (todoItem.text && todoItem.hasOwnProperty('completed') && isIdUnique) {
-    todoItems.push(todoItem);
-
-    return true;
+  // check for required fields
+  if(todoItem.id === undefined || todoItem.completed === undefined || !todoItem.text) {
+    return false;
   }
 
-  return false;
+  // check is item id is unique
+  if(todoItems.some(item => item.id === todoItem.id)) {
+    return false;
+  }
+
+  // default value should be false
+  todoItem.completed = false;
+  todoItems.push(todoItem);
+  
+  return true;
 }
 
 function viewTodoList(itemsType) {
@@ -22,7 +26,7 @@ function viewTodoList(itemsType) {
       return todoItems.filter(item => !item.completed);
       break;
     case 'all':
-      return todoItems;
+      return [...todoItems]; // to avoid mutability issues
       break;
     default:
       return false;
@@ -34,8 +38,8 @@ function editTodoItem(todoItemId, newText) {
     return false;
   }
 
-
   const ind = todoItems.findIndex(todo => todo.id === todoItemId);
+  
   if(ind !== -1) {
     todoItems[ind].text = newText;
 
@@ -68,23 +72,3 @@ function completeTodoItem(todoItemId) {
 
   return false;
 }
-
-// var todoItem = {
-//   text: ' ',
-//   completed: true,
-//   // id: 2
-// };
-
-// var todoItem2 = {
-//   text: ' ',
-//   completed: false,
-//   id: 1
-// };
-
-// addTodoItem(todoItem);
-// console.log(addTodoItem(todoItem));
-// console.log(addTodoItem(todoItem2));
-
-// console.log(viewTodoList('all'));
-// console.log(editTodoItem(2, 'newText'));
-// console.log('!!!!',todoItems);

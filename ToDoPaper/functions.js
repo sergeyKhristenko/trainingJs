@@ -1,7 +1,7 @@
 var todoItems = [];
 
 function addTodoItem(todoItem) {
-  const isIdUnique = todoItems.filter(item => item.id === todoItem.id).length === 0;
+  const isIdUnique = todoItem.id && todoItems.filter(item => item.id === todoItem.id).length === 0;
 
   if (todoItem.text && todoItem.hasOwnProperty('completed') && isIdUnique) {
     todoItems.push(todoItem);
@@ -25,7 +25,7 @@ function viewTodoList(itemsType) {
       return todoItems;
       break;
     default:
-      return;
+      return false;
   }
 }
 
@@ -34,33 +34,57 @@ function editTodoItem(todoItemId, newText) {
     return false;
   }
 
-  todoItems.forEach(item => {
-    if (item.id === todoItemId) {
-      item.text = newText;
 
-      return true;
-    } else {
-      return false;
-    }
-  });
+  const ind = todoItems.findIndex(todo => todo.id === todoItemId);
+  if(ind !== -1) {
+    todoItems[ind].text = newText;
+
+    return true;
+  }
+
+  return false;
 }
 
-var todoItem = {
-  text: ' ',
-  completed: true,
-  id: 2
-};
+function deleteTodoItem(todoItemId) {
+  const ind = todoItems.findIndex(todo => todo.id === todoItemId);
 
-var todoItem2 = {
-  text: ' ',
-  completed: false,
-  id: 1
-};
+  if(ind !== -1) {
+    todoItems.splice(ind, 1);
+
+    return true;
+  }
+
+  return false;
+}
+
+function completeTodoItem(todoItemId) {
+  const ind = todoItems.findIndex(todo => todo.id === todoItemId);
+
+  if(ind !== -1) {
+    todoItems[ind].completed = true;
+
+    return true;
+  }
+
+  return false;
+}
+
+// var todoItem = {
+//   text: ' ',
+//   completed: true,
+//   // id: 2
+// };
+
+// var todoItem2 = {
+//   text: ' ',
+//   completed: false,
+//   id: 1
+// };
 
 // addTodoItem(todoItem);
-console.log(addTodoItem(todoItem));
-console.log(addTodoItem(todoItem2));
+// console.log(addTodoItem(todoItem));
+// console.log(addTodoItem(todoItem2));
 
-console.log(viewTodoList('all'));
-console.log(editTodoItem(2, 'newText'));
-console.log(todoItems);
+// console.log(viewTodoList('all'));
+// console.log(editTodoItem(2, 'newText'));
+// console.log('!!!!',todoItems);

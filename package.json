@@ -1,0 +1,27 @@
+{
+  "name": "trainingj",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "initKarma": "karma init",
+    "test": "karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergeyKhristenko/trainingJs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sergeyKhristenko/trainingJs/issues"
+  },
+  "homepage": "https://github.com/sergeyKhristenko/trainingJs#readme",
+  "devDependencies": {
+    "jasmine-core": "3.1.0",
+    "karma": "2.0.2",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-jasmine": "1.1.1",
+    "karma-spec-reporter": "0.0.32"
+  }
+}

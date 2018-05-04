@@ -16,6 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'ToDoPaper/functions.js',
+      'L3T1/script.js',
       'test/**/*.spec.js'
     ],
 

@@ -11,9 +11,10 @@ function Machine(power) {
 }
 
 function Fridge(power = 100) {
+  // creating Fridge without 'power' leads to unlimited maxFood
   Machine.call(this, power);
 
-  let food = [];
+  let totalFood = [];
   const maxFoodQuantity = this._power / 100;
 
   this.addFood = function(item) {
@@ -21,18 +22,19 @@ function Fridge(power = 100) {
       throw new Error('Enable the fridge first!');
     }
 
-    const args = [...arguments];
-    const foodToAdd = [...food, ...args];
+    const foodToAdd = [...totalFood, ...arguments];
 
     if (foodToAdd.length > maxFoodQuantity) {
       throw new Error('There is too match food in the fridge!');
     }
 
-    food = foodToAdd;
+    totalFood = foodToAdd;
   };
 
   this.getFood = function(item) {
     // assuming the food is a flat array
-    return [...food];
+    return [...totalFood];
   };
 }
+
+// tests in 'test' folder

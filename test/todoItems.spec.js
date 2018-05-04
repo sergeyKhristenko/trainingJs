@@ -1,11 +1,18 @@
 describe('Add Todo', () => {
-  beforeEach(clearTodoList);
+  // silly thing...
+  let consoleSpy;
+
+  beforeEach(() => {
+    consoleSpy = spyOn(console, 'log').and.callThrough();
+    clearTodoList();
+  });
 
   it('add todo', () => {
     addTodoItem(todoItem);
 
     expect(todoItems.length).toEqual(1);
     expect(todoItems[0]).toEqual(todoItem);
+    expect(consoleSpy).toHaveBeenCalledWith(todoItems);
   });
 
   it('add todo id0', () => {
@@ -89,7 +96,12 @@ describe('Add Todo', () => {
 });
 
 describe('View Todos', () => {
-  beforeEach(clearTodoList);
+  let consoleSpy;
+
+  beforeEach(() => {
+    consoleSpy = spyOn(console, 'log').and.callThrough();
+    clearTodoList();
+  });
 
   it('"completed" - return only completed items', () => {
     addTodoItem(completed_todoItem);
@@ -99,6 +111,7 @@ describe('View Todos', () => {
 
     expect(filteredTodoList.length).toEqual(1);
     expect(filteredTodoList[0]).toEqual(completed_todoItem);
+    expect(consoleSpy).toHaveBeenCalledWith(todoItems);    
   });
 
   it('"not_completed" - return only NOT completed items', () => {
@@ -109,6 +122,7 @@ describe('View Todos', () => {
 
     expect(filteredTodoList.length).toEqual(1);
     expect(filteredTodoList[0]).toEqual(notCompleted_todoItem);
+    expect(consoleSpy).toHaveBeenCalledWith(todoItems);    
   });
 
   it('"all" - return all items', () => {
@@ -119,6 +133,7 @@ describe('View Todos', () => {
 
     expect(filteredTodoList.length).toEqual(2);
     expect(filteredTodoList).toEqual([completed_todoItem, notCompleted_todoItem]);
+    expect(consoleSpy).toHaveBeenCalledWith(todoItems);  
   });
 
   it(`when flag wasn't regonized return false`, () => {
@@ -130,20 +145,26 @@ describe('View Todos', () => {
 });
 
 describe('Edit Todos', () => {
-  beforeEach(clearTodoList);
+  let consoleSpy;
+
+  beforeEach(() => {
+    consoleSpy = spyOn(console, 'log').and.callThrough();
+    clearTodoList();
+  });
 
   it('change text and success flag', () => {
     addTodoItem({ ...todoItem });
 
     expect(editTodoItem(1, 'newText')).toBe(true);
     expect(todoItems[0].text).toEqual('newText');
+    expect(consoleSpy).toHaveBeenCalledWith(todoItems);    
   });
 
   it('if text arg was not specified - do nothing', () => {
     addTodoItem({ ...todoItem });
 
     expect(editTodoItem(1)).toBe(false);
-    expect(todoItems[0].text).toEqual(todoItem.text);
+    expect(todoItems[0].text).toEqual(todoItem.text);    
   });
 
   it('if no todo with such id - return false', () => {
@@ -155,7 +176,12 @@ describe('Edit Todos', () => {
 });
 
 describe('Delete Todos', () => {
-  beforeEach(clearTodoList);
+ let consoleSpy;
+
+  beforeEach(() => {
+    consoleSpy = spyOn(console, 'log').and.callThrough();
+    clearTodoList();
+  });
 
   it('delete by id', () => {
     addTodoItem({ ...todoItem });
@@ -165,6 +191,7 @@ describe('Delete Todos', () => {
     deleteTodoItem(2);
 
     expect(todoItems).toEqual([todoItem, { ...todoItem, id: 3 }]);
+    expect(consoleSpy).toHaveBeenCalledWith(todoItems);  
   });
 
   it('if no such id - return false', () => {
@@ -176,7 +203,12 @@ describe('Delete Todos', () => {
 });
 
 describe('Complete Todos', () => {
-  beforeEach(clearTodoList);
+  let consoleSpy;
+
+  beforeEach(() => {
+    consoleSpy = spyOn(console, 'log').and.callThrough();
+    clearTodoList();
+  });
 
   it('completeTodo by id', () => {
     addTodoItem({ ...todoItem, completed: false });
@@ -186,6 +218,7 @@ describe('Complete Todos', () => {
 
     expect(todoItems[0].completed).toBe(true);
     expect(todoItems[1].completed).toBe(false);
+    expect(consoleSpy).toHaveBeenCalledWith(todoItems);  
   });
 
   it('if no todo with such id - return false', () => {

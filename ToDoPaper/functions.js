@@ -13,6 +13,7 @@ function addTodoItem(todoItem) {
   todoItem.completed = false;
   todoItems.push(todoItem);
   
+  console.log(todoItems);
   return true;
 }
 
@@ -21,13 +22,10 @@ function viewTodoList(itemsType) {
   switch (itemsType) {
     case 'completed':
       return todoItems.filter(item => item.completed);
-      break;
     case 'not_completed':
       return todoItems.filter(item => !item.completed);
-      break;
     case 'all':
       return [...todoItems]; // to avoid mutability issues
-      break;
     default:
       return false;
   }
@@ -43,6 +41,7 @@ function editTodoItem(todoItemId, newText) {
   if(ind !== -1) {
     todoItems[ind].text = newText;
 
+    console.log(todoItems);
     return true;
   }
 
@@ -55,6 +54,7 @@ function deleteTodoItem(todoItemId) {
   if(ind !== -1) {
     todoItems.splice(ind, 1);
 
+    console.log(todoItems);
     return true;
   }
 
@@ -67,6 +67,7 @@ function completeTodoItem(todoItemId) {
   if(ind !== -1) {
     todoItems[ind].completed = true;
 
+    console.log(todoItems);
     return true;
   }
 

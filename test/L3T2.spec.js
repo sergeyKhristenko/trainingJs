@@ -1,4 +1,3 @@
-
 describe('Tests for L3T1 task', () => {
   let fridge;
   

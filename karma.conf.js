@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Fri Apr 27 2018 01:45:46 GMT+0300 (EEST)
+// Generated on Tue May 08 2018 23:32:12 GMT+0300 (EEST)
 
 module.exports = function(config) {
   config.set({
@@ -10,14 +10,28 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['mocha', 'chai'],
 
 
     // list of files / patterns to load in the browser
     files: [
+      // app depencies
+      'ToDoPaper/jquery-3.3.1.min.js',
+
+      // app files
+      'ToDoPaper/index.html',
       'ToDoPaper/functions.js',
+      'ToDoPaper/script.js',
+      'ToDoPaper/dom.js',
+
+      // tasks files
       'L3T1/script.js',
-      'test/**/*.spec.js'
+
+      // tests
+      'test/**/*.spec.js',
+
+      // test hellpers
+      'test/helpers.js'
     ],
 
 
@@ -29,13 +43,15 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      '**/*.html': ['html2js']
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['spec'],
+    reporters: ['mocha'],
+
 
     // web server port
     port: 9876,

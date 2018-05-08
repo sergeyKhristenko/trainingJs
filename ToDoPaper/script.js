@@ -1,7 +1,11 @@
 let todoItems = [];
 
 (function() {
-  $.getJSON('todos.json', function(data) {
-    todoItems = data.data;
+  $.ajax({
+    url: 'todos.json',
+    async: false,
+    success: function(data) {
+      todoItems = JSON.parse(data).data;
+    }
   });
 })();

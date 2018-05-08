@@ -1,231 +1,219 @@
-describe('Add Todo', () => {
+describe('functions tests', () => {
   // silly thing...
   let consoleSpy;
 
   beforeEach(() => {
-    consoleSpy = spyOn(console, 'log').and.callThrough();
-    clearTodoList();
+    // consoleSpy = spyOn(console, 'log').and.stub();
+
+    // spyOn(window, 'addTodoItemDom').and.stub();
+    // spyOn(window, 'viewTodoListDom').and.stub();
+    // spyOn(window, 'editTodoItemDom').and.stub();
+    // spyOn(window, 'deleteTodoItemDom').and.stub();
+    // spyOn(window, 'TodoTemplate').and.stub();
   });
 
-  it('add todo', () => {
-    addTodoItem(todoItem);
+  describe('Add Todo', () => {
+    beforeEach(clearTodoList);
 
-    expect(todoItems.length).toEqual(1);
-    expect(todoItems[0]).toEqual(todoItem);
-    expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    it('add todo', () => {
+      addTodoItem(todoItem);
+
+      expect(todoItems.length).to.equal(1);
+      expect(todoItems[0]).to.deep.equal(todoItem);
+      // expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    });
+
+    it('add todo id0', () => {
+      addTodoItem({ ...todoItem, id: 0 });
+
+      expect(todoItems.length).to.equal(1);
+      expect(todoItems[0]).to.deep.equal({ ...todoItem, id: 0 });
+    });
+
+    it('todo not_completed by default', () => {
+      addTodoItem({ ...todoItem, completed: true });
+
+      expect(todoItems.length).to.equal(1);
+      expect(todoItems[0].completed).to.be.false;
+    }),
+      it('add 2 todos', () => {
+        const newTodo = { ...todoItem, id: 2 };
+
+        addTodoItem(todoItem);
+        addTodoItem(newTodo);
+
+        expect(todoItems.length).to.equal(2);
+        expect(todoItems[0]).to.deep.equal(todoItem);
+        expect(todoItems[1]).to.deep.equal(newTodo);
+      });
+
+    it('check addTodoItem success flag', () => {
+      const valid_todoItem = {
+        text: 'text',
+        completed: false,
+        id: 1
+      };
+      const invalid_todoItem = {
+        text: '',
+        completed: false,
+        id: 2
+      };
+
+      const success = addTodoItem(valid_todoItem);
+      const fail = addTodoItem(invalid_todoItem);
+
+      expect(success).to.be.true;
+      expect(fail).to.be.false;
+    });
+
+    it('todo without text not added', () => {
+      addTodoItem({ ...todoItem, text: '' });
+
+      expect(todoItems).to.deep.equal([]);
+    });
+
+    it('todo without any field not added', () => {
+      const todoItem_NO_TEXT = {
+        completed: false,
+        id: 1
+      };
+      const todoItem_NO_COMPLETED = {
+        text: 'text',
+        id: 2
+      };
+      const todoItem_NO_ID = {
+        text: 'text',
+        completed: false
+      };
+
+      addTodoItem(todoItem_NO_TEXT);
+      addTodoItem(todoItem_NO_COMPLETED);
+      addTodoItem(todoItem_NO_ID);
+
+      expect(todoItems.length).to.equal(0);
+    });
+
+    it('todo with not unique ID not added', () => {
+      addTodoItem(todoItem);
+      addTodoItem(todoItem);
+
+      expect(todoItems.length).to.equal(1);
+      expect(todoItems[0]).to.deep.equal(todoItem);
+    });
   });
 
-  it('add todo id0', () => {
-    addTodoItem({ ...todoItem, id: 0 });
+  describe('View Todos', () => {
+    beforeEach(clearTodoList);
 
-    expect(todoItems.length).toEqual(1);
-    expect(todoItems[0]).toEqual({ ...todoItem, id: 0 });
+    it('"completed" - return only completed items', () => {
+      addTodoItem(completed_todoItem);
+      addTodoItem(notCompleted_todoItem);
+
+      const filteredTodoList = viewTodoList('completed');
+
+      expect(filteredTodoList.length).to.equal(1);
+      expect(filteredTodoList[0]).to.deep.equal(completed_todoItem);
+      // expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    });
+
+    it('"not_completed" - return only NOT completed items', () => {
+      addTodoItem(completed_todoItem);
+      addTodoItem(notCompleted_todoItem);
+
+      const filteredTodoList = viewTodoList('not_completed');
+
+      expect(filteredTodoList.length).to.equal(1);
+      expect(filteredTodoList[0]).to.deep.equal(notCompleted_todoItem);
+      // expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    });
+
+    it('"all" - return all items', () => {
+      addTodoItem(completed_todoItem);
+      addTodoItem(notCompleted_todoItem);
+
+      const filteredTodoList = viewTodoList('all');
+
+      expect(filteredTodoList.length).to.equal(2);
+      expect(filteredTodoList).to.deep.equal([completed_todoItem, notCompleted_todoItem]);
+      // expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    });
+
+    it(`when flag wasn't regonized return false`, () => {
+      addTodoItem(completed_todoItem);
+      addTodoItem(notCompleted_todoItem);
+
+      expect(viewTodoList('inrecognized')).to.be.false;
+    });
   });
 
-  it('todo not_completed by default', () => {
-    addTodoItem({...todoItem, completed: true});
+  describe('Edit Todos', () => {
+    beforeEach(clearTodoList);
 
-    expect(todoItems.length).toEqual(1);
-    expect(todoItems[0].completed).toBe(false);
-  }),
+    it('change text and success flag', () => {
+      addTodoItem({ ...todoItem });
 
-  it('add 2 todos', () => {
-    const newTodo = { ...todoItem, id: 2 };
+      expect(editTodoItem(1, 'newText')).to.be.true;
+      expect(todoItems[0].text).to.equal('newText');
+      // expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    });
 
-    addTodoItem(todoItem);
-    addTodoItem(newTodo);
+    it('if text arg was not specified - do nothing', () => {
+      addTodoItem({ ...todoItem });
 
-    expect(todoItems.length).toEqual(2);
-    expect(todoItems[0]).toEqual(todoItem);
-    expect(todoItems[1]).toEqual(newTodo);
+      expect(editTodoItem(1)).to.be.false;
+      expect(todoItems[0].text).to.equal(todoItem.text);
+    });
+
+    it('if no todo with such id - return false', () => {
+      addTodoItem({ ...todoItem });
+
+      expect(editTodoItem(100, 'newText')).to.be.false;
+      expect(todoItems[0].text).to.equal(todoItem.text);
+    });
   });
 
-  it('check addTodoItem success flag', () => {
-    const valid_todoItem = {
-      text: 'text',
-      completed: false,
-      id: 1
-    };
-    const invalid_todoItem = {
-      text: '',
-      completed: false,
-      id: 2
-    };
+  describe('Delete Todos', () => {
+    beforeEach(clearTodoList);
 
-    const success = addTodoItem(valid_todoItem);
-    const fail = addTodoItem(invalid_todoItem);
+    it('delete by id', () => {
+      addTodoItem({ ...todoItem });
+      addTodoItem({ ...todoItem, id: 2 });
+      addTodoItem({ ...todoItem, id: 3 });
 
-    expect(success).toBe(true);
-    expect(fail).toBe(false);
+      deleteTodoItem(2);
+
+      expect(todoItems).to.deep.equal([todoItem, { ...todoItem, id: 3 }]);
+      // expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    });
+
+    it('if no such id - return false', () => {
+      addTodoItem({ ...todoItem });
+
+      expect(deleteTodoItem(100)).to.be.false;
+      expect(todoItems).to.deep.equal([todoItem]);
+    });
   });
 
-  it('todo without text not added', () => {
-    addTodoItem({ ...todoItem, text: '' });
+  describe('Complete Todos', () => {
+    beforeEach(clearTodoList);
 
-    expect(todoItems).toEqual([]);
-  });
+    it('completeTodo by id', () => {
+      addTodoItem({ ...todoItem, completed: false });
+      addTodoItem({ ...todoItem, completed: false, id: 2 });
 
-  it('todo without any field not added', () => {
-    const todoItem_NO_TEXT = {
-      completed: false,
-      id: 1
-    };
-    const todoItem_NO_COMPLETED = {
-      text: 'text',
-      id: 2
-    };
-    const todoItem_NO_ID = {
-      text: 'text',
-      completed: false
-    };
+      completeTodoItem(todoItem.id);
 
-    addTodoItem(todoItem_NO_TEXT);
-    addTodoItem(todoItem_NO_COMPLETED);
-    addTodoItem(todoItem_NO_ID);
+      expect(todoItems[0].completed).to.be.true;
+      expect(todoItems[1].completed).to.be.false;
+      // expect(consoleSpy).toHaveBeenCalledWith(todoItems);
+    });
 
-    expect(todoItems.length).toEqual(0);
-  });
+    it('if no todo with such id - return false', () => {
+      addTodoItem({ ...todoItem, completed: false });
 
-  it('todo with not unique ID not added', () => {
-    addTodoItem(todoItem);
-    addTodoItem(todoItem);
-
-    expect(todoItems.length).toEqual(1);
-    expect(todoItems[0]).toEqual(todoItem);
-  });
-});
-
-describe('View Todos', () => {
-  let consoleSpy;
-
-  beforeEach(() => {
-    consoleSpy = spyOn(console, 'log').and.callThrough();
-    clearTodoList();
-  });
-
-  it('"completed" - return only completed items', () => {
-    addTodoItem(completed_todoItem);
-    addTodoItem(notCompleted_todoItem);
-
-    const filteredTodoList = viewTodoList('completed');
-
-    expect(filteredTodoList.length).toEqual(1);
-    expect(filteredTodoList[0]).toEqual(completed_todoItem);
-    expect(consoleSpy).toHaveBeenCalledWith(todoItems);    
-  });
-
-  it('"not_completed" - return only NOT completed items', () => {
-    addTodoItem(completed_todoItem);
-    addTodoItem(notCompleted_todoItem);
-
-    const filteredTodoList = viewTodoList('not_completed');
-
-    expect(filteredTodoList.length).toEqual(1);
-    expect(filteredTodoList[0]).toEqual(notCompleted_todoItem);
-    expect(consoleSpy).toHaveBeenCalledWith(todoItems);    
-  });
-
-  it('"all" - return all items', () => {
-    addTodoItem(completed_todoItem);
-    addTodoItem(notCompleted_todoItem);
-
-    const filteredTodoList = viewTodoList('all');
-
-    expect(filteredTodoList.length).toEqual(2);
-    expect(filteredTodoList).toEqual([completed_todoItem, notCompleted_todoItem]);
-    expect(consoleSpy).toHaveBeenCalledWith(todoItems);  
-  });
-
-  it(`when flag wasn't regonized return false`, () => {
-    addTodoItem(completed_todoItem);
-    addTodoItem(notCompleted_todoItem);
-
-    expect(viewTodoList('inrecognized')).toBe(false);
-  });
-});
-
-describe('Edit Todos', () => {
-  let consoleSpy;
-
-  beforeEach(() => {
-    consoleSpy = spyOn(console, 'log').and.callThrough();
-    clearTodoList();
-  });
-
-  it('change text and success flag', () => {
-    addTodoItem({ ...todoItem });
-
-    expect(editTodoItem(1, 'newText')).toBe(true);
-    expect(todoItems[0].text).toEqual('newText');
-    expect(consoleSpy).toHaveBeenCalledWith(todoItems);    
-  });
-
-  it('if text arg was not specified - do nothing', () => {
-    addTodoItem({ ...todoItem });
-
-    expect(editTodoItem(1)).toBe(false);
-    expect(todoItems[0].text).toEqual(todoItem.text);    
-  });
-
-  it('if no todo with such id - return false', () => {
-    addTodoItem({ ...todoItem });
-
-    expect(editTodoItem(100, 'newText')).toBe(false);
-    expect(todoItems[0].text).toEqual(todoItem.text);
-  });
-});
-
-describe('Delete Todos', () => {
- let consoleSpy;
-
-  beforeEach(() => {
-    consoleSpy = spyOn(console, 'log').and.callThrough();
-    clearTodoList();
-  });
-
-  it('delete by id', () => {
-    addTodoItem({ ...todoItem });
-    addTodoItem({ ...todoItem, id: 2 });
-    addTodoItem({ ...todoItem, id: 3 });
-
-    deleteTodoItem(2);
-
-    expect(todoItems).toEqual([todoItem, { ...todoItem, id: 3 }]);
-    expect(consoleSpy).toHaveBeenCalledWith(todoItems);  
-  });
-
-  it('if no such id - return false', () => {
-    addTodoItem({ ...todoItem });
-
-    expect(deleteTodoItem(100)).toBe(false);
-    expect(todoItems).toEqual([todoItem]);
-  });
-});
-
-describe('Complete Todos', () => {
-  let consoleSpy;
-
-  beforeEach(() => {
-    consoleSpy = spyOn(console, 'log').and.callThrough();
-    clearTodoList();
-  });
-
-  it('completeTodo by id', () => {
-    addTodoItem({ ...todoItem, completed: false });
-    addTodoItem({ ...todoItem, completed: false, id: 2 });
-
-    completeTodoItem(todoItem.id);
-
-    expect(todoItems[0].completed).toBe(true);
-    expect(todoItems[1].completed).toBe(false);
-    expect(consoleSpy).toHaveBeenCalledWith(todoItems);  
-  });
-
-  it('if no todo with such id - return false', () => {
-    addTodoItem({ ...todoItem, completed: false });
-
-    expect(completeTodoItem(todoItem.id + 1)).toBe(false);
-    expect(todoItems[0].completed).toBe(false);
+      expect(completeTodoItem(todoItem.id + 1)).to.be.false;
+      expect(todoItems[0].completed).to.be.false;
+    });
   });
 });
 

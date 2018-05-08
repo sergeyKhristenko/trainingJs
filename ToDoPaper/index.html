@@ -10,10 +10,23 @@
   <meta name="author" content="Sergey Khristenko">
 </head>
 
-<body></body>
+<body>
+  <div id="todo-items" style="width: 500px; margin:auto">
+    <H3 style="text-align: center">TODOS <span id="totalTodos"></span></H3>
+    <ul></ul>
+  </div>
+</body>
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="jquery-3.3.1.min.js"></script>
 <script src="functions.js"></script>
+<script src="dom.js"></script>
 <script src="script.js"></script>
+
+<script>
+  window.onload = function() {
+    initView();
+    showTotalTodoCount();
+  }
+</script>
 
 </html>

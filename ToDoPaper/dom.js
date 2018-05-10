@@ -34,7 +34,10 @@ function deleteTodoItemDom(todoItemId) {
 }
 
 function initView() {
-  viewTodoList('all');
+  const buttons = [...document.querySelectorAll('[name="viewTodoList"]')];
+  const activeFilter = buttons.filter(button => button.checked);
+
+  viewTodoList(activeFilter[0].value);
 }
 
 function showTotalTodoCount() {
@@ -43,9 +46,13 @@ function showTotalTodoCount() {
 }
 
 function TodoTemplate(todoItem) {
-  const template = `<span style="display: inline-block; width: 350px;">${todoItem.text}</span>
+  const template = `<span style="display: inline-block; width: 300px;">${todoItem.text}</span>
+                    <input type="text" name="editTodo" style="display:none" width: 300px>
                     <span>ID:${todoItem.id}</span>
-                    <input type="checkbox" ${todoItem.completed ? 'checked' : ''}>`;
+                    <input type="checkbox" name="completedTodo" ${todoItem.completed ? 'checked' : ''}>
+                    <button name="editBtn">Edit</button>
+                    <button name="deleteBtn">Delete</button>
+                    `;
 
   const todo = document.createElement('li');
   todo.id = `todoId-${todoItem.id}`;

@@ -98,7 +98,7 @@ function completeTodoItem(todoItemId) {
 
   if (ind !== -1) {
     todoItems[ind].completed = true;
-
+    
     console.log(todoItems);
     return true;
   }

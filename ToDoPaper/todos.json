@@ -1,6 +1,6 @@
 {
   "data": [
     { "text": "buy bread", "completed": false, "id": 1 },
-    { "text": "book a table", "completed": false, "id": 2 }
+    { "text": "book a table", "completed": true, "id": 2 }
   ]
 }

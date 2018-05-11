@@ -127,3 +127,59 @@ function TodoTemplate(todoItem) {
 
   return todo;
 }
+
+document.querySelector('.addTodo').addEventListener('click', submitTodo);
+document.querySelector('.todoInput').addEventListener('keyup', submitTodo);
+
+function submitTodo(event) {
+  if (event.code === 'Enter' || event.type === 'click') {
+    const input = document.querySelector('.todoInput');
+    const newId = Math.max(...todoItems.map(item => item.id), 0) + 1;
+
+    addTodoItem({ text: input.value, completed: false, id: newId });
+    input.value = '';
+  }
+}
+
+document.getElementById('todo-items').addEventListener('click', function(event) {
+  if (event.target.name === 'completedTodo') {
+    const id = event.target.parentElement.id.replace(/\D/g, '');
+    completeTodoItem(Number(id));
+    event.target.checked = true;
+
+    setTimeout(() => event.preventDefault(), 0);
+  }
+});
+
+document.getElementById('todo-items').addEventListener('click', function(event) {
+  if (event.target.name === 'deleteBtn') {
+    const id = event.target.parentElement.id.replace(/\D/g, '');
+    deleteTodoItem(Number(id));
+  }
+});
+
+document.getElementById('todo-items').addEventListener('click', function(event) {
+  if (event.target.name === 'editBtn') {
+    const prevValue = event.target.parentElement.querySelector('span');
+    const el = event.target.parentElement.querySelector('input[name="editTodo"]');
+    el.setAttribute('style', 'display: inline-block; width: 296px');
+    el.value = prevValue.textContent;
+    prevValue.setAttribute('style', 'display:none');
+    el.focus();
+
+    el.addEventListener('focusout', editTodo);
+    el.addEventListener('keyup', editTodo);
+
+    function editTodo(event) {
+      if (event.code === 'Enter' || event.type === 'focusout') {
+        const id = Number(event.target.parentElement.id.replace(/\D/g, ''));
+        editTodoItem(id, event.target.value);
+        el.setAttribute('style', 'display: none');
+        prevValue.setAttribute('style', 'display: inline-block; width: 300px;');
+
+        el.removeEventListener('focusout', editTodo);
+        el.removeEventListener('keyup', editTodo);
+      }
+    }
+  }
+});

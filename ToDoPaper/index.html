@@ -8,6 +8,7 @@
   <title>My homework</title>
   <meta name="description" content="Second homework">
   <meta name="author" content="Sergey Khristenko">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -23,9 +24,10 @@
       <input type="radio" name="viewTodoList" onclick="viewTodoList('not_completed')" id="not_completed" value="not_completed">
       <label for="not_completed">Not completed todos</label>
     </div>
-    <div style="padding: 30px; text-align: center">
-      <input type="text" id="newTodoText" style="width: 75%; float: left">
-      <button id="addTodo" style="width: 20%; float: left">Add</button>
+
+    <div class="addTodoContainer">
+      <input type="text" class="todoInput" placeholder="Enter new todo">
+      <button class="addTodo">Add</button>
     </div>
 
     <ul></ul>

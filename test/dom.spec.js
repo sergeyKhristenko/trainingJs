@@ -1,4 +1,4 @@
-describe('dom tests', () => {
+describe('dom.js tests', () => {
   const template = `<div id="todo-items" style="width: 500px; margin:auto">
     <H3 style="text-align: center">TODOS <span id="totalTodos"></span></H3>
     <ul></ul>

@@ -4,7 +4,6 @@ describe('functions tests', () => {
 
   beforeEach(() => {
     // consoleSpy = spyOn(console, 'log').and.stub();
-
     // spyOn(window, 'addTodoItemDom').and.stub();
     // spyOn(window, 'viewTodoListDom').and.stub();
     // spyOn(window, 'editTodoItemDom').and.stub();

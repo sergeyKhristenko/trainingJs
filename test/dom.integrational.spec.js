@@ -21,7 +21,7 @@ describe('Integrational tests', () => {
 
   it('add few todos', () => {
     [...Array(20).keys()].forEach(num => addTodoItem(new TodoItem().withId(num)));
-    expect(document.querySelectorAll('.todoItem').length).to.equal(20, 'Add 20 todoItem');
+    expect($$('.todoItem').length).to.equal(20, 'Add 20 todoItem');
   });
 
   it('edit todo item', () => {
@@ -30,7 +30,7 @@ describe('Integrational tests', () => {
 
     editTodoItem(2, 'new text');
 
-    expect(document.querySelector(`#todoId-${2} > span`).textContent).to.equal('new text');
+    expect($(`#todoId-${2} > span`).textContent).to.equal('new text');
   });
 
   it('delete todo item', () => {
@@ -38,7 +38,7 @@ describe('Integrational tests', () => {
 
     deleteTodoItem(2);
 
-    expect(document.querySelectorAll(`.todoItem`).length).to.equal(0);
+    expect($$(`.todoItem`).length).to.equal(0);
   });
 
   it('view todo list', () => {
@@ -46,13 +46,13 @@ describe('Integrational tests', () => {
     addTodoItem(new TodoItem().withId(3));
 
     viewTodoList('not_completed');
-    expect(document.querySelectorAll('.todoItem').length).to.equal(2);
+    expect($$('.todoItem').length).to.equal(2);
 
     viewTodoList('completed');
-    expect(document.querySelectorAll('.todoItem').length).to.equal(0);
+    expect($$('.todoItem').length).to.equal(0);
 
     viewTodoList('all');
-    expect(document.querySelectorAll('.todoItem').length).to.equal(2);
+    expect($$('.todoItem').length).to.equal(2);
   });
 
   it('complete todo and check viewTodoList', () => {
@@ -62,13 +62,13 @@ describe('Integrational tests', () => {
     completeTodoItem(2);
 
     viewTodoList('not_completed');
-    expect(document.querySelectorAll('.todoItem').length).to.equal(1);
+    expect($$('.todoItem').length).to.equal(1);
 
     viewTodoList('completed');
-    expect(document.querySelectorAll('.todoItem').length).to.equal(1);
+    expect($$('.todoItem').length).to.equal(1);
 
     viewTodoList('all');
-    expect(document.querySelectorAll('.todoItem').length).to.equal(2);
+    expect($$('.todoItem').length).to.equal(2);
   });
 
   it('chosen filter should not get lost when add new todo', () => {
@@ -76,46 +76,50 @@ describe('Integrational tests', () => {
     completeTodoItem(2);
 
     viewTodoList('completed');
-    expect(document.querySelectorAll('.todoItem').length).to.equal(1);
+    expect($$('.todoItem').length).to.equal(1);
 
     addTodoItem(new TodoItem().withId(3));
-    expect(document.querySelectorAll('.todoItem').length).to.equal(1);
+    expect($$('.todoItem').length).to.equal(1);
 
     deleteTodoItem(new TodoItem().withId(3));
-    expect(document.querySelectorAll('.todoItem').length).to.equal(1);
+    expect($$('.todoItem').length).to.equal(1);
   });
 
   describe('Show total todo count tests', () => {
-    const getTotalTodoCount = () => Number((document.getElementById('totalTodos').textContent).replace(/\D/g, ''));
+    const getTotalTodoCount = () => Number(document.getElementById('totalTodos').textContent.replace(/\D/g, ''));
     let todoCountBefore;
     const defaultTodoID = 1;
 
     beforeEach(() => {
+      initView();
       addTodoItem(new TodoItem().withId(defaultTodoID));
       todoCountBefore = getTotalTodoCount();
+    });
+    afterEach(() => {
+      todoItems = [];
     });
 
     it('total count incremented after adding todo', () => {
       addTodoItem(new TodoItem().withId(2));
-  
-      expect(getTotalTodoCount()).to.equal(todoCountBefore+1);
+
+      expect(getTotalTodoCount()).to.equal(todoCountBefore + 1);
     });
-  
+
     it('total count decremented after deleting todo', () => {
       deleteTodoItem(defaultTodoID);
-  
-      expect(getTotalTodoCount()).to.equal(todoCountBefore-1);
+
+      expect(getTotalTodoCount()).to.equal(todoCountBefore - 1);
     });
 
     it('total count not changed on edit todo', () => {
       editTodoItem(defaultTodoID, 'New Text');
-  
+
       expect(getTotalTodoCount()).to.equal(todoCountBefore);
     });
 
     it('total count not changed after complete todo', () => {
       completeTodoItem(defaultTodoID);
-  
+
       expect(getTotalTodoCount()).to.equal(todoCountBefore);
     });
 
@@ -125,5 +129,4 @@ describe('Integrational tests', () => {
       expect(getTotalTodoCount()).to.equal(todoCountBefore);
     });
   });
-
 });

@@ -8,8 +8,8 @@ describe('UI tests', () => {
   });
 
   it('add todo by click on Add button', () => {
-    $('#newTodoText').value = 'new text';
-    $('#addTodo').click();
+    $('.todoInput').value = 'new text';
+    $('.addTodo').click();
 
     expect($$('.todoItem').length).to.equal(1);
     expect($('.todoItem span').textContent).to.equal('new text');    
@@ -17,8 +17,8 @@ describe('UI tests', () => {
   });
 
   it('add todo by hitting Enter', () => {
-    $('#newTodoText').value = 'new text';
-    $('#newTodoText').hitEnter();
+    $('.todoInput').value = 'new text';
+    $('.todoInput').hitEnter();
 
     expect($$('.todoItem').length).to.equal(1);
     expect($('.todoItem span').textContent).to.equal('new text');

@@ -12,17 +12,14 @@
 </head>
 
 <body>
-  <div id="todo-items" style="width: 500px; margin:auto">
+  <div id="todo-items" class="container">
     <H3 style="text-align: center">TODOS
       <span id="totalTodos">(0)</span>
     </H3>
-    <div style="text-align: center">
-      <input type="radio" name="viewTodoList" onclick="viewTodoList('all')" id="all" value="all" checked>
-      <label for="all">All todos</label>
-      <input type="radio" name="viewTodoList" onclick="viewTodoList('completed')" id="completed" value="completed">
-      <label for="completed">Completed todos</label>
-      <input type="radio" name="viewTodoList" onclick="viewTodoList('not_completed')" id="not_completed" value="not_completed">
-      <label for="not_completed">Not completed todos</label>
+    <div class="filters">
+      <span class="filter active" name="all">All todos</span>
+      <span class="filter" name="completed">Completed </span>
+      <span class="filter" name="not_completed">Not completed </span>
     </div>
 
     <div class="addTodoContainer">

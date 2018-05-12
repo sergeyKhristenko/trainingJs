@@ -34,18 +34,21 @@ function deleteTodoItemDom(todoItemId) {
 }
 
 function initView() {
-  // set default sorting 
-  const buttons = [...document.querySelectorAll('[name="viewTodoList"]')];
-  const activeFilter = buttons.find(button => button.checked);
+  // set default sorting
+  viewTodoList(document.querySelector('.filter.active').getAttribute('name'));
 
-  viewTodoList(activeFilter.value);
+  document.querySelector('.addTodo').addEventListener('click', submitTodo);
+  document.querySelector('.todoInput').addEventListener('keyup', submitTodo);
+  document.querySelector('.filters').addEventListener('click', function(event) {
+    document.querySelector('.filter.active').classList.remove('active');
+    event.target.classList.add('active');
 
-  document.getElementById('addTodo').addEventListener('click', submitTodo);
-  document.getElementById('newTodoText').addEventListener('keyup', submitTodo);
+    viewTodoList(event.target.getAttribute('name'));
+  });
 
   function submitTodo(event) {
     if (event.code === 'Enter' || event.type === 'click') {
-      const input = document.getElementById('newTodoText');
+      const input = document.querySelector('.todoInput');
       // increment max id from todoList or set 1 as initial
       const newId = Math.max(...todoItems.map(item => item.id), 0) + 1;
 
@@ -59,9 +62,9 @@ function initView() {
       const id = Number(event.target.parentElement.id.replace(/\D/g, ''));
 
       // forbid "uncomplete" todos
-      if(todoItems.find(todo => todo.id === id).completed === true) {
+      if (todoItems.find(todo => todo.id === id).completed === true) {
         event.preventDefault();
-        
+
         return;
       }
 
@@ -72,18 +75,19 @@ function initView() {
 
   document.getElementById('todo-items').addEventListener('click', function(event) {
     if (event.target.name === 'deleteBtn') {
-      const id = Number(event.target.parentElement.id.replace(/\D/g, ''));
+      const id = Number(event.target.parentElement.parentElement.id.replace(/\D/g, ''));
       deleteTodoItem(id);
     }
   });
 
   document.getElementById('todo-items').addEventListener('click', function(event) {
     if (event.target.name === 'editBtn') {
+      console.log(event.target.parentElement);
       // reveal the input on click 'edit' btn, get the value and pass it back to span
       // this entire function looks clunky but I don't know yet how to make pretty...
-      const prevValue = event.target.parentElement.querySelector('span');
-      const el = event.target.parentElement.querySelector('input[name="editTodo"]');
-      el.setAttribute('style', 'display: inline-block; width: 296px');
+      const prevValue = event.target.parentElement.parentElement.querySelector('span');
+      const el = event.target.parentElement.parentElement.querySelector('input[name="editTodo"]');
+      el.setAttribute('style', 'display: inline-block; width: 296px; outline: none; border: none');
       el.value = prevValue.textContent;
       prevValue.setAttribute('style', 'display:none');
       el.focus();
@@ -112,14 +116,14 @@ function showTotalTodoCount() {
 }
 
 function TodoTemplate(todoItem) {
-  const template = `<span style="display: inline-block; width: 300px;">${todoItem.text}</span>
-                    <input type="text" name="editTodo" style="display:none" width: 300px>
+  const template = `<span class="todoText">${todoItem.text}</span>
+                    <input type="text" name="editTodo" style="display:none">
                     <span>ID:${todoItem.id}</span>
                     <input type="checkbox" name="completedTodo" ${todoItem.completed ? 'checked' : ''}>
-                    <button name="editBtn">Edit</button>
-                    <button name="deleteBtn">Delete</button>
-                    `;
-
+                    <div class="buttons">
+                      <button class="editBtn" name="editBtn">Edit</button>
+                      <button class="deleteBtn" name="deleteBtn">Delete</button>
+                    </div>`;
   const todo = document.createElement('li');
   todo.id = `todoId-${todoItem.id}`;
   todo.classList.add('todoItem'); // for testing purpose
@@ -127,59 +131,3 @@ function TodoTemplate(todoItem) {
 
   return todo;
 }
-
-document.querySelector('.addTodo').addEventListener('click', submitTodo);
-document.querySelector('.todoInput').addEventListener('keyup', submitTodo);
-
-function submitTodo(event) {
-  if (event.code === 'Enter' || event.type === 'click') {
-    const input = document.querySelector('.todoInput');
-    const newId = Math.max(...todoItems.map(item => item.id), 0) + 1;
-
-    addTodoItem({ text: input.value, completed: false, id: newId });
-    input.value = '';
-  }
-}
-
-document.getElementById('todo-items').addEventListener('click', function(event) {
-  if (event.target.name === 'completedTodo') {
-    const id = event.target.parentElement.id.replace(/\D/g, '');
-    completeTodoItem(Number(id));
-    event.target.checked = true;
-
-    setTimeout(() => event.preventDefault(), 0);
-  }
-});
-
-document.getElementById('todo-items').addEventListener('click', function(event) {
-  if (event.target.name === 'deleteBtn') {
-    const id = event.target.parentElement.id.replace(/\D/g, '');
-    deleteTodoItem(Number(id));
-  }
-});
-
-document.getElementById('todo-items').addEventListener('click', function(event) {
-  if (event.target.name === 'editBtn') {
-    const prevValue = event.target.parentElement.querySelector('span');
-    const el = event.target.parentElement.querySelector('input[name="editTodo"]');
-    el.setAttribute('style', 'display: inline-block; width: 296px');
-    el.value = prevValue.textContent;
-    prevValue.setAttribute('style', 'display:none');
-    el.focus();
-
-    el.addEventListener('focusout', editTodo);
-    el.addEventListener('keyup', editTodo);
-
-    function editTodo(event) {
-      if (event.code === 'Enter' || event.type === 'focusout') {
-        const id = Number(event.target.parentElement.id.replace(/\D/g, ''));
-        editTodoItem(id, event.target.value);
-        el.setAttribute('style', 'display: none');
-        prevValue.setAttribute('style', 'display: inline-block; width: 300px;');
-
-        el.removeEventListener('focusout', editTodo);
-        el.removeEventListener('keyup', editTodo);
-      }
-    }
-  }
-});

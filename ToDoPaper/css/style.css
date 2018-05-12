@@ -1,27 +1,134 @@
+body {
+  margin: auto;
+  background: #edf0f1;
+}
+
+.container {
+  width: 500px;
+  margin: auto;
+}
+
+.filters {
+  text-align: center;
+}
+
+.filter {
+  border: 1px solid #edf0f1;
+  cursor: pointer;
+  display: inline-block;
+  /* background: #fff; */
+  padding: 5px;
+  width: 100px;
+  border-radius: 4px;
+  margin-left: 5px;
+  outline: none;
+}
+
+.filter:hover {
+  border-color: rgba(175, 47, 47, 0.1);
+}
+
+.filter.active {
+  background: #fff;
+  border: 1px solid;
+  border-color: rgba(175, 47, 47, 0.2);
+}
+
 .addTodoContainer {
   margin-top: 5px;
   border-radius: 5px;
-  width: 100%;
+  width: auto;
   height: 50px;
   background: #25b99a;
-  padding: 4%;
+  padding: 15px;
+  padding-bottom: 5px;
   box-shadow: 0px 2px 4px rgba(44, 62, 80, 0.15);
 }
 
 .todoInput {
   width: 80%;
-  height: 50px;
+  height: 80%;
+  font-size: 15px;
+  color: #fff;
+  padding: 0;
+  font-weight: 500;
+  text-indent: 15px;
   float: left;
   border: 0;
-  border-radius: 2px;
+  outline: none;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
   box-shadow: none;
   background: rgba(255, 255, 255, 0.2);
 }
 
-.addTodo {
-  width: 20%;
-}
-
 .todoInput::-webkit-input-placeholder {
   color: rgba(255, 255, 255, 0.75);
+}
+
+.addTodo {
+  color: #0f826a;
+  cursor: pointer;
+  outline: none;
+  width: 20%;
+  height: 80%;
+  border: 0;
+  box-shadow: none;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  background: #fff;
+}
+
+.addTodo:active {
+  color: #041d17;
+}
+
+ul {
+  padding: 0;
+  list-style-type: none;
+}
+
+.todoItem {
+  margin: auto;
+  width: 450px;
+  margin-bottom: 10px;
+  background: #fff;
+  padding: 15px;
+  text-indent: 5px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.todoText {
+  display: inline-block;
+  width: 60%;
+}
+
+.buttons {
+  width: 104px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.buttons button {
+  cursor: pointer;
+  margin-left: 2px;
+  width: 50px;
+  height: 50px;
+  float: left;
+  background: none;
+  box-shadow: none;
+  outline: none;
+  border: 0;
+  border-radius: 4px;
+}
+
+.buttons .deleteBtn {
+  background: #d9534f;
+}
+
+.buttons .editBtn {
+  background: #f0ad4e;
 }
